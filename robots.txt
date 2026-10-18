@@ -1,0 +1,7 @@
+Sitemap: https://saritsamuel2016.mozello.co.il/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: *
+Crawl-delay: 10
