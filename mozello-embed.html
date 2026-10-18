@@ -1,0 +1,38 @@
+<!-- ============================================================
+     להדבקה בבלוק HTML / טקסט בכל דף במוזלו.
+     מכסה את כל עמוד המוזלו באתר מ-GitHub Pages, במסך מלא.
+     עריכת דף המוזלו עצמו בעתיד: מוסיפים ?noframe לכתובת.
+     ============================================================ -->
+<style>
+  html.sarit-full, html.sarit-full body { overflow: hidden !important; margin: 0 !important; }
+  #sarit-site {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+    border: 0; margin: 0; padding: 0; z-index: 2147483647; background: #fff; display: block;
+  }
+</style>
+<iframe id="sarit-site" title="אתר מתמטיקה לצוות השש שנתי" allow="clipboard-write; fullscreen"></iframe>
+<script>
+(function () {
+  var SITE = 'https://miribaranes.github.io/math-site/';
+  var frame = document.getElementById('sarit-site');
+  if (!frame) return;
+  // Don't take over inside an editor preview or when ?noframe is in the address
+  if (/[?&]noframe\b/.test(location.search) || window.top !== window) { frame.remove(); return; }
+  document.documentElement.classList.add('sarit-full');
+
+  // Which page: #page-11/ (a shared link) > same path as this Mozello page > home
+  var path = '';
+  try { path = decodeURIComponent(location.hash.slice(1)) || location.pathname.replace(/^\/+/, ''); } catch (e) {}
+  if (!/^[\w\-\/.]*$/.test(path) || path.indexOf('..') >= 0) path = '';
+  frame.src = SITE + path;
+
+  // Keep the address bar and tab title in sync with the page shown inside
+  var origin = new URL(SITE).origin;
+  window.addEventListener('message', function (e) {
+    if (e.origin !== origin || !e.data || e.data.type !== 'sarit-nav') return;
+    var p = String(e.data.path || '');
+    if (/^[\w\-\/.]*$/.test(p)) history.replaceState(null, '', location.pathname + location.search + (p ? '#' + p : ''));
+    if (e.data.title) document.title = e.data.title;
+  });
+})();
+</script>

@@ -32,6 +32,21 @@
     if (e.ctrlKey && e.shiftKey && (e.key === 'E' || e.key === 'e')) { e.preventDefault(); loadEditor(); }
   }, true);
 
+  /* Shown inside the Mozello page (full-screen iframe)?
+     Tell the parent which page is open so its address bar follows,
+     and open external links in a new tab (many sites refuse to be framed). */
+  if (window.parent !== window) {
+    var root = new URL('../', base).href;
+    var here = location.href.split('#')[0];
+    var path = here.indexOf(root) === 0 ? here.slice(root.length) : '';
+    try { window.parent.postMessage({ type: 'sarit-nav', path: path, title: document.title }, '*'); } catch (e) {}
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a || a.target || e.defaultPrevented) return;
+      if (a.host && a.host !== location.host) a.target = '_blank';
+    });
+  }
+
   var loggedIn = false;
   try { loggedIn = !!sessionStorage.getItem('sarit.admin.session'); } catch (e) {}
   if (loggedIn || location.hash === '#admin') loadEditor();
