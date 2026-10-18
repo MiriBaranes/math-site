@@ -1254,6 +1254,33 @@ function ghPut(path, text, message) {
     return fetch(ghUrl(path), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify({ message: message, content: toB64(text), branch: ghCfg().branch, sha: cur && cur.sha || undefined }) });
   }).then(function (r) { if (!r.ok) throw r; return r.json(); });
 }
+/* Write-permission probe: a PUT with a deliberately wrong sha is rejected
+   with 409/422 when the token may write (nothing is written), 401/403 when not. */
+function ghWriteCheck(path) {
+  return fetch(ghUrl(path), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify({ message: 'permission check', content: '', sha: '0000000000000000000000000000000000000000', branch: ghCfg().branch }) })
+    .then(function (r) {
+      if (r.status === 409 || r.status === 422) return { ok: true };
+      return ghError(r).then(function (e) { return { ok: false, status: e.status, message: e.message }; });
+    });
+}
+function ghError(r) {
+  if (!r || typeof r.json !== 'function') return Promise.resolve({ status: 0, message: (r && r.message) || 'אין חיבור' });
+  return r.json().then(function (j) { return { status: r.status, message: j.message || '' }; }, function () { return { status: r.status, message: '' }; });
+}
+function tokenHelp(status, message) {
+  var g = ghCfg();
+  modal('🔑 לטוקן אין הרשאת כתיבה', el('div', { style: 'line-height:1.7' },
+    el('p', { style: 'margin-top:0', text: 'הטוקן מאפשר לקרוא את המאגר אבל לא לשמור בו (' + status + (message ? ': ' + message : '') + ').' }),
+    el('b', { text: 'איך מתקנים (פעם אחת):' }),
+    el('ol', { style: 'padding-inline-start:20px;margin:6px 0' },
+      el('li', {}, 'פותחים את ', el('a', { href: 'https://github.com/settings/personal-access-tokens', target: '_blank', rel: 'noopener', text: 'רשימת הטוקנים ב-GitHub' }), ' ובוחרים את הטוקן (או "Generate new token").'),
+      el('li', { html: 'ב-<b>Repository access</b> בוחרים <b>Only select repositories</b> ← <b dir="ltr">' + (g.repo || 'math-site') + '</b>.<br><span style="color:#b91c1c">לא</span> "Public repositories (read-only)" – זה קריאה בלבד.' }),
+      el('li', { html: 'ב-<b>Permissions ← Repository permissions</b> מוסיפים <b>Contents</b> ומשנים ל-<b>Read and write</b> (ברירת המחדל היא Read-only).' }),
+      el('li', { html: 'שומרים (<b>Update</b> / <b>Generate token</b>). טוקן חדש – מעתיקים ומדביקים ב-⚙️ במקום הישן.' }),
+      el('li', { text: 'לוחצים "בדיקת חיבור" – צריך להופיע "הכול תקין ✓ קריאה וכתיבה".' })),
+    el('div', { class: 'se-hint', text: 'הטיוטה שלך שמורה בדפדפן – שום שינוי לא אבד.' })),
+    [{ label: 'פתיחת הגדרות ⚙️', primary: true, onClick: function () { setTimeout(openSettings, 0); } }, { label: 'סגירה' }]);
+}
 function toB64(str) {
   var bytes = new TextEncoder().encode(str), bin = '';
   for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
@@ -1278,8 +1305,14 @@ function openSettings() {
     { label: 'בדיקת חיבור', onClick: function () {
       var cfg = {}; $$('input[name]', form).forEach(function (i) { cfg[i.name] = i.value.trim(); });
       local.set(KEYS.github, cfg);
-      ghGet(PAGE).then(function (r) { toast(r ? 'החיבור תקין ✓ הקובץ נמצא במאגר' : 'החיבור תקין, אבל הקובץ ' + PAGE + ' לא נמצא במאגר', r ? 'ok' : 'err'); })
-        .catch(function (r) { toast('החיבור נכשל (' + (r && r.status || 'רשת') + ') – בדקי את הפרטים והטוקן', 'err'); });
+      toast('בודקת...');
+      ghGet(PAGE).then(function (r) {
+        if (!r) { toast('החיבור תקין, אבל הקובץ ' + PAGE + ' לא נמצא במאגר – בדקי שם מאגר / תיקייה', 'err'); return; }
+        return ghWriteCheck(PAGE).then(function (w) {
+          if (w.ok) toast('הכול תקין ✓ קריאה וכתיבה למאגר – אפשר לפרסם', 'ok');
+          else tokenHelp(w.status, w.message);
+        });
+      }).catch(function (r) { ghError(r).then(function (e) { if (e.status === 401 || e.status === 403) tokenHelp(e.status, e.message); else toast('החיבור נכשל (' + (e.status || 'רשת') + ') ' + e.message, 'err'); }); });
       return false;
     } },
     { label: 'ניתוק', danger: true, onClick: function () { local.del(KEYS.github); toast('פרטי GitHub נמחקו מהדפדפן'); } }
@@ -1320,12 +1353,14 @@ function publish() {
       .then(function () { src = parse(html); initial = regions.map(saveHtml); local.del(KEYS.draft(PAGE)); });
     chain.then(function () { updateStatus(); toast('פורסם בהצלחה! 🎉 האתר יתעדכן תוך דקה-שתיים', 'ok'); })
       .catch(function (r) {
-        var c = r && r.status, msg = 'הפרסום נכשל';
-        if (c === 401 || c === 403) msg = 'הטוקן לא תקין או בלי הרשאת כתיבה';
-        else if (c === 404) msg = 'המאגר / הענף לא נמצאו – בדקי ב-⚙️';
-        else if (c === 409 || c === 422) msg = 'התנגשות גרסאות – נסי שוב';
-        else if (!c) msg = 'אין חיבור ל-GitHub';
-        toast(msg + (c ? ' (' + c + ')' : '') + '. הטיוטה שמורה; אפשר גם "⬇ HTML".', 'err');
+        return ghError(r).then(function (e) {
+          var c = e.status, msg = 'הפרסום נכשל';
+          if (c === 401 || c === 403) { tokenHelp(c, e.message); return; }
+          if (c === 404) msg = 'המאגר / הענף לא נמצאו – בדקי ב-⚙️';
+          else if (c === 409 || c === 422) msg = 'התנגשות גרסאות – נסי שוב';
+          else if (!c) msg = 'אין חיבור ל-GitHub';
+          toast(msg + (c ? ' (' + c + ': ' + e.message + ')' : '') + '. הטיוטה שמורה; אפשר גם "⬇ HTML".', 'err');
+        });
       })
       .then(function () { b.disabled = false; b.textContent = '🚀 פרסום'; });
   }
