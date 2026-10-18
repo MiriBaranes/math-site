@@ -1,0 +1,107 @@
+{
+ "version": 1,
+ "templates": [
+  {
+   "id": "code-orange",
+   "name": "קוד – כתום (עיכוב)",
+   "group": "כרטיסי קוד",
+   "html": "<div style=\"background-color: #fff7ed; border-right: 6px solid #f97316; border-radius: 16px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; box-sizing: border-box;\"><span data-slot=\"badge\" style=\"background-color: #f97316; color: #ffffff; padding: 4px 12px; border-radius: 8px; font-weight: bold; font-size: 15px; white-space: nowrap;\">קוד 000</span><div><div data-slot=\"title\" style=\"font-weight: bold; font-size: 17px; color: #1e293b; margin-bottom: 4px;\">כותרת</div><div data-slot=\"text\" style=\"font-size: 14px; color: #475569; line-height: 1.5;\">כתבי כאן את ההסבר.</div></div></div>"
+  },
+  {
+   "id": "code-blue",
+   "name": "קוד – כחול (מידע)",
+   "group": "כרטיסי קוד",
+   "html": "<div style=\"background-color: #f0f9ff; border-right: 6px solid #0284c7; border-radius: 16px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; box-sizing: border-box;\"><span data-slot=\"badge\" style=\"background-color: #0284c7; color: #ffffff; padding: 4px 12px; border-radius: 8px; font-weight: bold; font-size: 15px; white-space: nowrap;\">קוד 000</span><div><div data-slot=\"title\" style=\"font-weight: bold; font-size: 17px; color: #1e293b; margin-bottom: 4px;\">כותרת</div><div data-slot=\"text\" style=\"font-size: 14px; color: #475569; line-height: 1.5;\">כתבי כאן את ההסבר.</div></div></div>"
+  },
+  {
+   "id": "code-red",
+   "name": "קוד – אדום (אזהרה)",
+   "group": "כרטיסי קוד",
+   "html": "<div style=\"background-color: #fef2f2; border-right: 6px solid #ef4444; border-radius: 16px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; box-sizing: border-box;\"><span data-slot=\"badge\" style=\"background-color: #ef4444; color: #ffffff; padding: 4px 12px; border-radius: 8px; font-weight: bold; font-size: 15px; white-space: nowrap;\">קוד 000</span><div><div data-slot=\"title\" style=\"font-weight: bold; font-size: 17px; color: #1e293b; margin-bottom: 4px;\">כותרת</div><div data-slot=\"text\" style=\"font-size: 14px; color: #475569; line-height: 1.5;\">כתבי כאן את ההסבר.</div></div></div>"
+  },
+  {
+   "id": "code-purple",
+   "name": "קוד – סגול (מנהלי)",
+   "group": "כרטיסי קוד",
+   "html": "<div style=\"background-color: #faf5ff; border-right: 6px solid #a855f7; border-radius: 16px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; box-sizing: border-box;\"><span data-slot=\"badge\" style=\"background-color: #a855f7; color: #ffffff; padding: 4px 12px; border-radius: 8px; font-weight: bold; font-size: 15px; white-space: nowrap;\">קוד 000</span><div><div data-slot=\"title\" style=\"font-weight: bold; font-size: 17px; color: #1e293b; margin-bottom: 4px;\">כותרת</div><div data-slot=\"text\" style=\"font-size: 14px; color: #475569; line-height: 1.5;\">כתבי כאן את ההסבר.</div></div></div>"
+  },
+  {
+   "id": "code-rose",
+   "name": "קוד – ורוד-אדום (פסילה)",
+   "group": "כרטיסי קוד",
+   "html": "<div style=\"background-color: #fff1f2; border-right: 6px solid #e11d48; border-radius: 16px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; box-sizing: border-box;\"><span data-slot=\"badge\" style=\"background-color: #e11d48; color: #ffffff; padding: 4px 12px; border-radius: 8px; font-weight: bold; font-size: 15px; white-space: nowrap;\">קוד 000</span><div><div data-slot=\"title\" style=\"font-weight: bold; font-size: 17px; color: #1e293b; margin-bottom: 4px;\">כותרת</div><div data-slot=\"text\" style=\"font-size: 14px; color: #475569; line-height: 1.5;\">כתבי כאן את ההסבר.</div></div></div>"
+  },
+  {
+   "id": "link-purple",
+   "name": "שורת קישור – סגול",
+   "group": "קישורים",
+   "html": "<a data-slot=\"link\" href=\"https://\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background-color: #faf5ff; border: 2.5px solid #a855f7; border-radius: 20px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); box-sizing: border-box; direction: rtl; margin: 8px 0;\"><div style=\"display: flex; align-items: center; gap: 14px;\"><span data-slot=\"icon\" style=\"font-size: 26px;\">📚</span><span data-slot=\"title\" style=\"font-size: 19px; font-weight: bold; color: #1e1b4b;\">שם הקישור</span></div><span data-slot=\"button\" style=\"background-color: #9333ea; color: #ffffff; padding: 8px 16px; border-radius: 10px; font-weight: bold; font-size: 15px; white-space: nowrap; margin-right: 10px;\">לחץ כאן ↗</span></a>"
+  },
+  {
+   "id": "link-green",
+   "name": "שורת קישור – ירוק",
+   "group": "קישורים",
+   "html": "<a data-slot=\"link\" href=\"https://\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background-color: #ecfdf5; border: 2.5px solid #10b981; border-radius: 20px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); box-sizing: border-box; direction: rtl; margin: 8px 0;\"><div style=\"display: flex; align-items: center; gap: 14px;\"><span data-slot=\"icon\" style=\"font-size: 26px;\">📄</span><span data-slot=\"title\" style=\"font-size: 19px; font-weight: bold; color: #1e1b4b;\">שם הקישור</span></div><span data-slot=\"button\" style=\"background-color: #059669; color: #ffffff; padding: 8px 16px; border-radius: 10px; font-weight: bold; font-size: 15px; white-space: nowrap; margin-right: 10px;\">לחץ כאן ↗</span></a>"
+  },
+  {
+   "id": "link-blue",
+   "name": "שורת קישור – כחול",
+   "group": "קישורים",
+   "html": "<a data-slot=\"link\" href=\"https://\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background-color: #f0f9ff; border: 2.5px solid #0ea5e9; border-radius: 20px; text-decoration: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); box-sizing: border-box; direction: rtl; margin: 8px 0;\"><div style=\"display: flex; align-items: center; gap: 14px;\"><span data-slot=\"icon\" style=\"font-size: 26px;\">🌐</span><span data-slot=\"title\" style=\"font-size: 19px; font-weight: bold; color: #1e1b4b;\">שם הקישור</span></div><span data-slot=\"button\" style=\"background-color: #0284c7; color: #ffffff; padding: 8px 16px; border-radius: 10px; font-weight: bold; font-size: 15px; white-space: nowrap; margin-right: 10px;\">לחץ כאן ↗</span></a>"
+  },
+  {
+   "id": "big-button",
+   "name": "כפתור קישור גדול",
+   "group": "קישורים",
+   "html": "<div style=\"margin: 20px 0px; direction: rtl; text-align: center;\"><a data-slot=\"link\" href=\"https://\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display: inline-flex; align-items: center; justify-content: center; gap: 14px; padding: 24px 40px; background-color: #f6f0fe; border: 2.5px solid #8247f5; border-radius: 28px; text-decoration: none; box-shadow: 0 4px 12px rgba(130, 71, 245, 0.08); max-width: 100%; box-sizing: border-box;\"><span data-slot=\"icon\" style=\"font-size: 32px;\">📁</span><span data-slot=\"title\" style=\"color: #7828e8; font-size: 24px; font-weight: 800;\">לחצו כאן</span></a></div>"
+  },
+  {
+   "id": "hub-card",
+   "name": "כרטיס בדפי המרכז (חט\"ב / חט\"ע)",
+   "group": "קישורים",
+   "html": "<a data-slot=\"link\" href=\"https://\" target=\"_blank\" class=\"link-card card-cyan\">קישור חדש 🔗</a>"
+  },
+  {
+   "id": "tip",
+   "name": "טיפ / הערה למורים",
+   "group": "טקסט",
+   "html": "<div style=\"border: 2px dashed #16a34a; background-color: #f0fdf4; border-radius: 16px; padding: 16px 20px; display: flex; gap: 14px; align-items: flex-start; direction: rtl; margin: 10px 0;\"><span data-slot=\"icon\" style=\"font-size: 26px; line-height: 1;\">💡</span><div><div data-slot=\"title\" style=\"font-weight: bold; font-size: 17px; color: #14532d; margin-bottom: 4px;\">שימו לב</div><div data-slot=\"text\" style=\"font-size: 15px; color: #166534; line-height: 1.6;\">כתבי כאן את ההערה.</div></div></div>"
+  },
+  {
+   "id": "banner",
+   "name": "באנר הודעה",
+   "group": "טקסט",
+   "html": "<div style=\"background: linear-gradient(135deg, #0f6cbf, #1e40af); color: #ffffff; border-radius: 18px; padding: 22px 24px; text-align: center; direction: rtl; margin: 12px 0; box-shadow: 0 6px 18px rgba(15, 108, 191, 0.25);\"><div data-slot=\"icon\" style=\"font-size: 30px;\">📢</div><div data-slot=\"title\" style=\"font-size: 22px; font-weight: 800; margin: 4px 0;\">הודעה חשובה</div><div data-slot=\"text\" style=\"font-size: 16px; opacity: 0.92;\">פרטי ההודעה.</div></div>"
+  },
+  {
+   "id": "heading",
+   "name": "כותרת",
+   "group": "טקסט",
+   "html": "<h2 data-slot=\"title\" style=\"font-size: 24px; font-weight: bold; color: #1e1b4b; text-align: center; margin: 16px 0 8px;\">כותרת חדשה</h2>"
+  },
+  {
+   "id": "subheading",
+   "name": "כותרת ביניים עם קו",
+   "group": "טקסט",
+   "html": "<h3 style=\"margin: 18px 0 8px; text-align: right;\"><span data-slot=\"title\" style=\"display: inline-block; font-size: 19px; color: #1e1b4b; border-bottom: 3px solid #0f6cbf; padding-bottom: 2px;\">כותרת ביניים</span></h3>"
+  },
+  {
+   "id": "paragraph",
+   "name": "פסקת טקסט",
+   "group": "טקסט",
+   "html": "<p data-slot=\"text\" style=\"font-size: 16px; line-height: 1.7; color: #334155; margin: 8px 0;\">כתבי כאן טקסט חופשי.</p>"
+  },
+  {
+   "id": "image",
+   "name": "תמונה עם כיתוב",
+   "group": "מדיה",
+   "html": "<figure style=\"margin: 16px auto; text-align: center; max-width: 100%;\"><img data-slot=\"image\" src=\"https://placehold.co/600x300?text=%D7%AA%D7%9E%D7%95%D7%A0%D7%94\" alt=\"\" style=\"max-width: 100%; border-radius: 14px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);\"><figcaption data-slot=\"caption\" style=\"font-size: 14px; color: #64748b; margin-top: 6px;\">כיתוב לתמונה</figcaption></figure>"
+  },
+  {
+   "id": "divider",
+   "name": "קו מפריד",
+   "group": "מדיה",
+   "html": "<hr style=\"border: 0; height: 3px; background: linear-gradient(90deg, transparent, #a855f7, transparent); margin: 24px 0;\">"
+  }
+ ]
+}

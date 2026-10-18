@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>לוח בקשות ל-Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f8fb;--surface:#fff;--ink:#1e293b;--soft:#64748b;--line:#e2e8f0;--admin:#7c3aed;--admin-soft:#ede9fe;--warn:#fef3c7;--danger:#dc2626;--ok:#16a34a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Rubik',Arial,sans-serif;line-height:1.5}
+button,input,select,textarea{font:inherit}
+header.top{background:#1e1b4b;color:#fff;padding:18px 16px}
+header.top .in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header.top h1{margin:0;font-size:22px}
+header.top p{margin:2px 0 0;opacity:.8;font-size:14px}
+header.top a{color:#fff;background:rgba(255,255,255,.12);padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 60px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:860px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 14px rgba(15,23,42,.05)}
+.card h2{margin:0 0 12px;font-size:18px}
+.span2{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.field label,.lbl{font-size:13px;font-weight:500;color:var(--soft)}
+input[type=text],select,textarea{border:1px solid #cbd5e1;border-radius:10px;padding:8px 10px;width:100%;background:#fff;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:5px 12px;cursor:pointer;font-size:13.5px}
+.chip[aria-pressed="true"]{background:var(--admin);border-color:var(--admin);color:#fff}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+.btn{border:1px solid #cbd5e1;background:#fff;color:var(--ink);border-radius:10px;padding:9px 16px;cursor:pointer}
+.btn:hover{background:#f1f5f9}
+.btn.primary{background:var(--admin);border-color:var(--admin);color:#fff}
+.btn.primary:hover{background:#6d28d9}
+.btn.small{padding:4px 10px;font-size:12.5px;border-radius:8px}
+.btn.danger{color:var(--danger)}
+.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.idea{border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:#fff;text-align:right;display:flex;flex-direction:column;gap:2px}
+.idea:hover{border-color:var(--admin);background:var(--admin-soft)}
+.idea b{font-size:14px}.idea span{font-size:12.5px;color:var(--soft)}
+.idea.added{opacity:.5}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.toolbar .grow{flex:1}
+.req{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;background:#fff}
+.req.done{opacity:.55}.req.done .txt{text-decoration:line-through}
+.req .main{flex:1;min-width:0}
+.req .meta{font-size:12px;color:var(--soft);display:flex;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.tag{border-radius:6px;padding:1px 7px;font-size:11.5px;font-weight:500;background:#f1f5f9}
+.tag.p-חשוב{background:#fef3c7;color:#92400e}.tag.p-דחוף{background:#fee2e2;color:#991b1b}
+.tag.src{background:#e0f2fe;color:#075985}
+.req .txt{font-size:14.5px;white-space:pre-wrap;word-break:break-word}
+.req .acts{display:flex;gap:4px;flex-shrink:0}
+.empty{color:var(--soft);text-align:center;padding:20px;font-size:14px}
+pre.out{background:#0f172a;color:#e2e8f0;border-radius:12px;padding:14px;white-space:pre-wrap;word-break:break-word;max-height:420px;overflow:auto;font-size:13px;direction:rtl;text-align:right;margin:0 0 10px}
+.check{display:flex;gap:6px;align-items:center;font-size:13.5px;color:var(--soft);margin-bottom:10px}
+.how{background:var(--warn);border-radius:12px;padding:12px 14px;font-size:14px}
+.how ol{margin:6px 0 0;padding-inline-start:20px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1e1b4b;color:#fff;padding:10px 18px;border-radius:12px;z-index:30;font-size:14px}
+.toast.ok{background:var(--ok)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="in">
+    <div>
+      <h1>🗂 לוח בקשות ל-Claude</h1>
+      <p>כאן אוספים רעיונות, הערות ובקשות לכל דפי האתר – ושולחים הכול בהודעה אחת לצ׳אט.</p>
+    </div>
+    <a href="index.html">← חזרה לאתר</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="card span2 how">
+    <b>איך זה עובד?</b>
+    <ol>
+      <li>כותבים בקשה בטופס, או בוחרים רעיון מוכן מ"בנק הרעיונות".</li>
+      <li>הערות שכתבת על הדפים עצמם (במצב מנחה ← 💬 הערות ל-Claude) מופיעות כאן אוטומטית.</li>
+      <li>לוחצים <b>📋 העתקה</b> ומדביקים בצ׳אט. Claude מעדכן את הקבצים באתר.</li>
+      <li>אחרי שהשינוי נעשה מסמנים ✓ טופל.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>✍️ בקשה חדשה</h2>
+    <div class="field">
+      <span class="lbl">סוג הבקשה</span>
+      <div class="chips" id="catChips"></div>
+    </div>
+    <div class="field">
+      <label for="page">איזה דף?</label>
+      <select id="page"></select>
+    </div>
+    <div class="field">
+      <label for="target">על איזה חלק בדף?</label>
+      <select id="target"></select>
+    </div>
+    <div class="field">
+      <label for="text">מה לשנות / להוסיף?</label>
+      <textarea id="text" placeholder="למשל: להוסיף מתחת לכל קוד שורה 'מה עושים?' עם הנחיה לרכז/ת"></textarea>
+    </div>
+    <div class="field">
+      <span class="lbl">דחיפות</span>
+      <div class="chips" id="priChips"></div>
+    </div>
+    <button class="btn primary" id="addBtn" type="button">＋ הוספה לרשימה</button>
+  </section>
+
+  <section class="card">
+    <h2>💡 בנק רעיונות <span style="font-size:13px;color:var(--soft);font-weight:400">– לחיצה מוסיפה לרשימה</span></h2>
+    <div class="ideas" id="ideas"></div>
+  </section>
+
+  <section class="card span2">
+    <div class="toolbar">
+      <h2 style="margin:0">📋 הבקשות שלי</h2>
+      <span class="grow"></span>
+      <div class="chips" id="filterChips"></div>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <section class="card span2">
+    <h2>✉️ ההודעה לשליחה ל-Claude</h2>
+    <label class="check"><input type="checkbox" id="onlyOpen" checked> רק בקשות פתוחות (שלא סומנו כ"טופל")</label>
+    <pre class="out" id="out"></pre>
+    <div class="row" style="flex:0">
+      <button class="btn primary" id="copyBtn" type="button" style="flex:0 0 auto">📋 העתקת ההודעה</button>
+      <button class="btn" id="mdBtn" type="button" style="flex:0 0 auto">⬇ הורדה כקובץ</button>
+      <button class="btn" id="exportBtn" type="button" style="flex:0 0 auto">💾 גיבוי (JSON)</button>
+      <label class="btn" style="flex:0 0 auto">📂 טעינת גיבוי<input type="file" id="importFile" accept="application/json" hidden></label>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+'use strict';
+var KEYS = { requests: 'sarit.claude.requests' };
+var PAGES = [
+  ['index.html', 'ראשי', ['באנר הפתיחה', 'הספר והקישורים']],
+  ['page-22/index.html', 'חטיבת ביניים', ['כרטיסי הקישורים', 'חלון קופץ', 'מבחני תנופה']],
+  ['page-1/index.html', 'חטיבה עליונה', ['כרטיסי הקישורים', 'חלון קופץ', 'קטגוריה בחלון']],
+  ['--3/index.html', 'אתר המפמ"ר', ['שורות הקישורים']],
+  ['httpsexamseducationgovil/index.html', 'אגף הבחינות', ['כפתור הקישור']],
+  ['page-11/index.html', 'קודים לבגרויות', ['קוד 444 – עיכוב', 'קוד 666 – חסם', 'קוד 777 – חשד', 'קוד 888 – עיכוב מנהלי', 'קוד 999 – פסל']],
+  ['page-3/index.html', 'יומן שנה', ['לוח השנה', 'משימות החודש', 'חגים ואירועים']],
+  ['*', 'כל האתר', ['עיצוב כללי', 'תפריט הניווט', 'השעון בכותרת', 'מצב העריכה (למנחה)', 'שבלונות']]
+];
+var CATS = ['עיצוב', 'תוכן', 'פיצ׳ר חדש', 'באג', 'שבלונה'];
+var PRIS = ['רגיל', 'חשוב', 'דחוף'];
+var IDEAS = [
+  ['פיצ׳ר חדש', 'אקורדיון לקודים', 'לחיצה על קוד פותחת/סוגרת את ההסבר – דף קצר ונקי יותר.'],
+  ['פיצ׳ר חדש', 'שורת "מה עושים?"', 'מתחת לכל קוד – הנחיה קצרה לרכז/ת או למחנך/ת מה הצעד הבא.'],
+  ['פיצ׳ר חדש', 'כפתור הדפסה / PDF', 'גרסה נקייה להדפסה לחדר המורים, עם לוגו ותאריך.'],
+  ['פיצ׳ר חדש', 'שיתוף בוואטסאפ', 'כפתור ששולח קישור לקוד ספציפי לקבוצת הצוות.'],
+  ['פיצ׳ר חדש', 'קישור ישיר לכל קוד', 'כתובת כמו ‎#777 שפותחת ומדגישה את הקוד.'],
+  ['פיצ׳ר חדש', 'קוד QR לדף', 'להצגה בישיבת צוות או לתלייה בחדר המורים.'],
+  ['פיצ׳ר חדש', 'מצב הקרנה', 'מסך מלא עם טקסט גדול לישיבת צוות – קוד אחד בכל פעם.'],
+  ['פיצ׳ר חדש', 'שאלות נפוצות', 'מקטע "שאלות ותשובות" – למשל "האם אפשר לערער על 777?".'],
+  ['תוכן', 'קישור למקור הרשמי', 'הפניה לנוהל אגף הבחינות לכל קוד.'],
+  ['עיצוב', 'אייקונים לקודים', 'אייקון קטן לכל סוג: ⏳ עיכוב, 🚫 פסל, ⚠️ חשד...'],
+  ['עיצוב', 'מצב כהה', 'תצוגה כהה אוטומטית לפי הגדרות המכשיר.'],
+  ['עיצוב', 'אנימציית כניסה', 'הכרטיסים נכנסים בעדינות בגלילה.'],
+  ['שבלונה', 'שבלונת "טבלה"', 'שבלונה חדשה שמציגה כמה קודים בטבלה קומפקטית.'],
+  ['שבלונה', 'שבלונת "ציר זמן"', 'לתהליך ערעור: הגשה ← ועדה ← החלטה.'],
+  ['פיצ׳ר חדש', 'תגית "חדש!"', 'סימון אוטומטי לבלוקים שנוספו בשבועיים האחרונים.']
+];
+
+function get(k, fb) { try { var v = localStorage.getItem(k); return v == null ? fb : JSON.parse(v); } catch (e) { return fb; } }
+function set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { toast('לא ניתן לשמור בדפדפן הזה'); } }
+function $(s) { return document.querySelector(s); }
+function el(tag, attrs) {
+  var n = document.createElement(tag);
+  Object.keys(attrs || {}).forEach(function (k) {
+    var v = attrs[k]; if (v == null || v === false) return;
+    if (k === 'text') n.textContent = v; else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v); else n.setAttribute(k, v === true ? '' : v);
+  });
+  for (var i = 2; i < arguments.length; i++) { var c = arguments[i]; if (c != null) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); }
+  return n;
+}
+function uid() { return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+var reqs = get(KEYS.requests, []);
+var cat = CATS[0], pri = PRIS[0], filter = 'פתוחות';
+
+function chips(box, items, current, onPick) {
+  box.replaceChildren.apply(box, items.map(function (c) {
+    return el('button', { type: 'button', class: 'chip', 'aria-pressed': String(c === current), text: c, onclick: function () { onPick(c); } });
+  }));
+}
+function drawChips() {
+  chips($('#catChips'), CATS, cat, function (c) { cat = c; drawChips(); });
+  chips($('#priChips'), PRIS, pri, function (c) { pri = c; drawChips(); });
+  chips($('#filterChips'), ['פתוחות', 'טופלו', 'הכול'], filter, function (c) { filter = c; drawChips(); drawList(); });
+}
+function pageOf(path) { return PAGES.filter(function (p) { return p[0] === path; })[0] || PAGES[PAGES.length - 1]; }
+function drawPages() {
+  $('#page').replaceChildren.apply($('#page'), PAGES.map(function (p) { return el('option', { value: p[0], text: p[1] }); }));
+  $('#page').onchange = drawTargets;
+}
+function drawTargets() {
+  var opts = ['כללי – כל הדף'].concat(pageOf($('#page').value)[2]);
+  $('#target').replaceChildren.apply($('#target'), opts.map(function (o) { return el('option', { value: o, text: o }); }));
+}
+function drawIdeas() {
+  $('#ideas').replaceChildren.apply($('#ideas'), IDEAS.map(function (i) {
+    var added = reqs.some(function (r) { return r.idea === i[1]; });
+    return el('button', { type: 'button', class: 'idea' + (added ? ' added' : ''), title: added ? 'כבר ברשימה' : 'הוספה לרשימה', onclick: function () {
+      if (added) return;
+      add({ category: i[0], page: '*', pageName: 'כל האתר', target: 'כללי', text: i[1] + ': ' + i[2], priority: 'רגיל', idea: i[1] });
+    } }, el('b', { text: (added ? '✓ ' : '') + i[1] }), el('span', { text: i[2] }));
+  }));
+}
+function add(r) {
+  reqs.push(Object.assign({ id: uid(), source: 'board', done: false, created: Date.now() }, r));
+  save(); toast('נוסף לרשימה ✓', 'ok');
+}
+function save() { set(KEYS.requests, reqs); drawAll(); }
+function drawList() {
+  var list = reqs.filter(function (r) { return filter === 'הכול' || (filter === 'טופלו' ? r.done : !r.done); });
+  var box = $('#list');
+  if (!list.length) { box.replaceChildren(el('div', { class: 'empty', text: filter === 'טופלו' ? 'עדיין אין בקשות שטופלו.' : 'אין בקשות פתוחות. הוסיפי בקשה או בחרי רעיון 👆' })); return; }
+  box.replaceChildren.apply(box, list.map(function (r) {
+    var cb = el('input', { type: 'checkbox', title: 'טופל', 'aria-label': 'סימון כטופל', checked: r.done, onchange: function () { r.done = cb.checked; save(); } });
+    return el('div', { class: 'req' + (r.done ? ' done' : '') },
+      cb,
+      el('div', { class: 'main' },
+        el('div', { class: 'meta' },
+          el('span', { class: 'tag', text: r.category }),
+          el('span', { class: 'tag p-' + r.priority, text: r.priority }),
+          r.source === 'page' ? el('span', { class: 'tag src', text: 'נכתב בדף 📍' }) : null,
+          el('span', { text: (r.pageName || pageOf(r.page)[1]) + ' · ' + r.target })),
+        el('div', { class: 'txt', text: r.text })),
+      el('div', { class: 'acts' },
+        el('button', { type: 'button', class: 'btn small', title: 'עריכה', text: '✏️', onclick: function () { var t = prompt('עריכת הבקשה:', r.text); if (t != null && t.trim()) { r.text = t.trim(); save(); } } }),
+        el('button', { type: 'button', class: 'btn small danger', title: 'מחיקה', text: '🗑', onclick: function () { if (confirm('למחוק את הבקשה?')) { reqs = reqs.filter(function (x) { return x.id !== r.id; }); save(); } } })));
+  }));
+}
+function message() {
+  var list = reqs.filter(function (r) { return !$('#onlyOpen').checked || !r.done; });
+  var order = { 'דחוף': 0, 'חשוב': 1, 'רגיל': 2 };
+  list = list.slice().sort(function (a, b) { return (order[a.priority] - order[b.priority]) || (a.created - b.created); });
+  var L = ['שלום Claude, אלו בקשות שינוי לאתר (תיקיית השורש: saritsamuel2016.mozello.co.il):', ''];
+  if (!list.length) L.push('(אין בקשות כרגע)');
+  var byPage = {}, n = 0;
+  list.forEach(function (r) { var k = r.page || '*'; (byPage[k] = byPage[k] || []).push(r); });
+  Object.keys(byPage).forEach(function (p) {
+    L.push('## ' + (byPage[p][0].pageName || pageOf(p)[1]) + (p !== '*' ? ' (' + p + ')' : ''));
+    byPage[p].forEach(function (r) {
+      L.push((++n) + '. [' + r.category + ' · ' + r.priority + '] על: ' + r.target + (r.done ? ' (כבר טופל)' : ''));
+      L.push('   ' + r.text.replace(/\n/g, '\n   '));
+      if (r.snippet) L.push('   קטע הקוד:', '   ```html', '   ' + r.snippet, '   ```');
+    });
+    L.push('');
+  });
+  L.push('בבקשה תעדכן את הקבצים ותחזיר לי את ה-HTML המלא של הדפים שהשתנו.');
+  return L.join('\n');
+}
+function drawOut() { $('#out').textContent = message(); }
+function drawAll() { drawList(); drawIdeas(); drawOut(); }
+
+$('#addBtn').onclick = function () {
+  var t = $('#text').value.trim();
+  if (!t) { $('#text').focus(); return; }
+  add({ category: cat, page: $('#page').value, pageName: pageOf($('#page').value)[1], target: $('#target').value, text: t, priority: pri });
+  $('#text').value = '';
+};
+$('#text').addEventListener('keydown', function (e) { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) $('#addBtn').click(); });
+$('#onlyOpen').onchange = drawOut;
+$('#copyBtn').onclick = function () {
+  var t = message();
+  var ok = function () { toast('הועתק! הדביקי בצ׳אט עם Claude ✨', 'ok'); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok, legacy); else legacy();
+  function legacy() { var r = document.createRange(); r.selectNodeContents($('#out')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); ok(); } catch (e) { toast('סמני את הטקסט והעתיקי ידנית'); } }
+};
+function download(name, text, type) {
+  var a = el('a', { href: URL.createObjectURL(new Blob([text], { type: type })), download: name });
+  document.body.appendChild(a); a.click(); a.remove();
+}
+$('#mdBtn').onclick = function () { download('בקשות-לClaude.md', message(), 'text/markdown;charset=utf-8'); };
+$('#exportBtn').onclick = function () { download('requests-backup.json', JSON.stringify({ requests: reqs }, null, 2), 'application/json'); };
+$('#importFile').onchange = function (e) {
+  var f = e.target.files[0]; if (!f) return;
+  f.text().then(function (txt) {
+    var j = JSON.parse(txt), incoming = Array.isArray(j) ? j : (j.requests || []);
+    var ids = {}; reqs.forEach(function (r) { ids[r.id] = 1; });
+    incoming.forEach(function (r) { if (r && r.id && r.text && !ids[r.id]) reqs.push(r); });
+    save(); toast('הגיבוי נטען ✓', 'ok');
+  }).catch(function () { toast('הקובץ לא תקין'); });
+  e.target.value = '';
+};
+window.addEventListener('storage', function (e) {
+  if (e.key === KEYS.requests) { reqs = get(KEYS.requests, []); drawAll(); }
+});
+var tt;
+function toast(m, k) {
+  var old = document.querySelector('.toast'); if (old) old.remove();
+  var t = el('div', { class: 'toast' + (k ? ' ' + k : ''), role: 'status', text: m });
+  document.body.appendChild(t); clearTimeout(tt); tt = setTimeout(function () { t.remove(); }, 2800);
+}
+
+drawChips(); drawPages(); drawTargets(); drawAll();
+})();
+</script>
+</body>
+</html>
